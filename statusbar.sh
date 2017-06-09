@@ -24,7 +24,7 @@ print_mem() {
 }
 
 print_hddfree() {
-  hddfree="$(df -Ph /dev/sdb1 | awk '$3 ~ /[0-9]+/ {print $4}')"
+  hddfree="$(df -Ph /dev/sdb2 | awk '$3 ~ /[0-9]+/ {print $4}')"
   echo -ne "${regularColor}¨${hddfree} - ROOT"
 }
 
