@@ -24,13 +24,13 @@ print_mem() {
 }
 
 print_hddfree() {
-  hddfree="$(df -Ph /dev/sdb2 | awk '$3 ~ /[0-9]+/ {print $4}')"
-  echo -ne "${regularColor}¨${hddfree} - ROOT"
+  hddfree="$(df -Ph /dev/sda2 | awk '$3 ~ /[0-9]+/ {print $4}')"
+  echo -ne "${regularColor}¨ ${hddfree} - ROOT"
 }
 
 print_homefree() {
-	hddfree="$(df -Ph /dev/sda3 | awk '$3 ~ /[0-9]+/ {print $4}')"
-	echo -ne "${regularColor}¨${hddfree} - HOME"
+	hddfree="$(df -Ph /dev/sdb1 | awk '$3 ~ /[0-9]+/ {print $4}')"
+	echo -ne "${regularColor}¨ ${hddfree} - HOME"
 }
 
 print_power() {
@@ -49,10 +49,15 @@ print_datetime() {
   echo -ne "${regularColor}É${datetime}"
 }
 
-
+print_volume() {
+    VOLUME="$( amixer sget Master | grep -e 'Front Left:' | \
+        sed 's/[^\[]*\[\([0-9]\{1,3\}%\).*\(on\|off\).*/\2 \1/' | sed 's/off/M/' | sed 's/on //' )"
+    echo -ne "${regularColor}$VOLUME - VOL"
+}
 while true; do
-    DWM_STATUS="$(separator_edge)$(print_song_info) $(print_hddfree) $(sep) $(print_homefree) $(sep) $(print_mem) $(sep) $(print_datetime) $(sep) $(print_power) $(separator_edge)";
-xsetroot -name "$DWM_STATUS";
-sleep 5;
+    DWM_STATUS="$(separator_edge)$(print_song_info) $(print_volume) $(sep) $(print_hddfree) $(sep) $(print_homefree) $(sep) $(print_mem) $(sep) $(print_datetime) $(sep) $(print_power) $(separator_edge)"
+xsetroot -name "$DWM_STATUS"
+sleep 5
 done 
+
 
