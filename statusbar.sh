@@ -8,7 +8,6 @@ separator_edge() {
 
 sep() {
     echo -ne "${redColor}...${rpmColor}"    
-
 }
 
 print_song_info() {
@@ -38,26 +37,24 @@ print_power() {
   battery="$(cat /sys/class/power_supply/BAT1/capacity)"
   timer="$(acpi -b | grep "Battery" | awk '{print $5}' | cut -c 1-5)"
   if [ "${status}" == 1 ]; then
-    echo -ne "${regularColor}ÂON ${battery}"
+    echo -ne "${regularColor}Â ON ${battery}"
   else
-    echo -ne "${regularColor}ð${battery}% ${timer}"
+    echo -ne "${regularColor}ð ${battery}% ${timer}"
   fi
 }
 
 print_datetime() {
   datetime="$(date "+%a %d %b %I:%M")"
-  echo -ne "${regularColor}É${datetime}"
+  echo -ne "${regularColor}È ${datetime}"
 }
 
 print_volume() {
-    VOLUME="$( amixer sget Master | grep -e 'Front Left:' | \
-        sed 's/[^\[]*\[\([0-9]\{1,3\}%\).*\(on\|off\).*/\2 \1/' | sed 's/off/M/' | sed 's/on //' )"
-    echo -ne "${regularColor}$VOLUME - VOL"
+  volume="$(amixer | grep 'Left: Playback' | cut -d' ' -f 7,8 | tr -d [])"
+  echo -ne "${regularColor}í ${volume}"
 }
+
 while true; do
     DWM_STATUS="$(separator_edge)$(print_song_info) $(print_volume) $(sep) $(print_hddfree) $(sep) $(print_homefree) $(sep) $(print_mem) $(sep) $(print_datetime) $(sep) $(print_power) $(separator_edge)"
 xsetroot -name "$DWM_STATUS"
 sleep 5
 done 
-
-
